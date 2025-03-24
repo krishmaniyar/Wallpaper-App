@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:wallpaper_app/models/photo_models.dart';
 import 'package:http/http.dart' as http;
@@ -16,6 +15,7 @@ class _SearchState extends State<Search> {
 
   List<PhotosModel> photos = [];
   TextEditingController searchcontroller = TextEditingController();
+  bool search = false;
 
   getSearchWallpaper(String searchQuery) async {
     await http.get(Uri.parse("https://api.pexels.com/v1/search?query=$searchQuery&per_page=30"), headers: {"Authorization": "TCyy6x0cb7QwqzwTaGChNp1nQsuHiW5KFjbMZCs1oa3VCmD9YaUNw3GN"}).then((value){
@@ -26,7 +26,7 @@ class _SearchState extends State<Search> {
         photos.add(photosModel);
       });
       setState(() {
-
+        search = true;
       });
     });
   }
@@ -42,13 +42,13 @@ class _SearchState extends State<Search> {
                 "Search",
                 style: TextStyle(
                   color: Colors.black,
-                  fontSize: 30.0,
-                  fontWeight: FontWeight.bold,
+                  fontSize: 35.0,
+                  fontWeight: FontWeight.w700,
                   fontFamily: "Poppins",
                 ),
               ),
             ),
-            SizedBox(height: 5,),
+            SizedBox(height: 20,),
             Container(
               padding: EdgeInsets.symmetric(horizontal: 10),
               margin: EdgeInsets.symmetric(horizontal: 20),
@@ -58,11 +58,20 @@ class _SearchState extends State<Search> {
                 borderRadius: BorderRadius.circular(10),
               ),
               child: TextField(
+                style: TextStyle(
+                  fontSize: 22.0,
+                  fontWeight: FontWeight.w500,
+                ),
                 controller: searchcontroller,
                 decoration: InputDecoration(
                   border: InputBorder.none,
                   suffixIcon: GestureDetector(
                     onTap: () {
+                      photos = [];
+                      search = false;
+                      setState(() {
+
+                      });
                       getSearchWallpaper(searchcontroller.text);
                     },
                     child: Icon(

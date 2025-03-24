@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+
+import 'full_screen.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -12,12 +16,13 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
 
   List Wallpaperimage = [
-    "images/wallpaper1.jpg",
-    "images/wallpaper2.jpg",
-    "images/wallpaper3.jpg",
+    "https://thumbs.dreamstime.com/b/vertical-shot-mercedes-amg-gt-c-luxury-car-streetgasm-event-bran-romania-vertical-shot-mercedes-amg-gt-c-luxury-car-345633835.jpg",
+    "https://e1.pxfuel.com/desktop-wallpaper/298/751/desktop-wallpaper-car-portrait-vertical-car-thumbnail.jpg",
+    "https://nedricknews.com/wp-content/uploads/2023/05/Dream-Cars.jpg",
   ];
 
   int activeIndex = 0;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +33,7 @@ class _HomeState extends State<Home> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Material(
                     elevation: 5.0,
@@ -36,22 +42,35 @@ class _HomeState extends State<Home> {
                       borderRadius: BorderRadius.circular(60),
                       child: Image.asset(
                         "images/boy.png",
-                        height: 60,
-                        width: 60,
+                        height: 50,
+                        width: 50,
                         fit: BoxFit.cover,
                       ),
                     ),
                   ),
-                  SizedBox(width: 20,),
                   Text(
                     'Wallify',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 30.0,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
+                      fontSize: 35.0,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: "Poppins",
                     ),
                   ),
+                  Row(
+                    children: [
+                      SizedBox(width: 20,),
+                      GestureDetector(
+                        onTap: () async {
+                          await _auth.signOut();
+                        },
+                        child: Icon(
+                          Icons.logout_outlined,
+                          size: 30,
+                        ),
+                      ),
+                    ],
+                  )
                 ],
               ),
               SizedBox(height: 30,),
@@ -59,7 +78,18 @@ class _HomeState extends State<Home> {
                 itemCount: Wallpaperimage.length,
                 itemBuilder: (context, index, realIndex) {
                   final res = Wallpaperimage[index];
-                  return buildImage(res, index);
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreen(imagePath: Wallpaperimage[index])));
+                    },
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: CachedNetworkImage(
+                        imageUrl: Wallpaperimage[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  );
                 },
                 options: CarouselOptions(
                   autoPlay: true,
