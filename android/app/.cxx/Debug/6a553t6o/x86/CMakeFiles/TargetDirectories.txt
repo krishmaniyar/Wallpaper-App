@@ -1,0 +1,2 @@
+D:/StudioProjects/Wallpaper-App/android/app/.cxx/Debug/6a553t6o/x86/CMakeFiles/edit_cache.dir
+D:/StudioProjects/Wallpaper-App/android/app/.cxx/Debug/6a553t6o/x86/CMakeFiles/rebuild_cache.dir
